@@ -1,5 +1,3 @@
-use std::f32::INFINITY;
-
 #[derive(Debug)]
 struct CubeSet {
     green: i32,
@@ -13,7 +11,10 @@ impl CubeSet {
     const MAX_BLUE: i32 = 14;
 
     pub fn is_valid(&self) -> bool {
-        if self.blue > CubeSet::MAX_BLUE || self.green > CubeSet::MAX_GREEN || self.red > CubeSet::MAX_RED {
+        if self.blue > CubeSet::MAX_BLUE
+            || self.green > CubeSet::MAX_GREEN
+            || self.red > CubeSet::MAX_RED
+        {
             return false;
         }
         true
@@ -42,25 +43,24 @@ impl Game {
 }
 
 struct GameSet {
-    games: Vec<Game>
+    games: Vec<Game>,
 }
 
 impl GameSet {
     pub fn new() -> GameSet {
-        GameSet {
-            games: Vec::new()
-        }
+        GameSet { games: Vec::new() }
     }
 
     pub fn is_valid(&self) -> bool {
-        self.games.iter().fold(true, |acc, x| acc && x.cubes.is_valid())
+        self.games
+            .iter()
+            .all(|x| x.cubes.is_valid())
     }
 
     pub fn minimal_game(&self) -> Game {
         let mut min_game = Game::new();
 
         self.games.iter().for_each(|g| {
-
             if g.cubes.red > min_game.cubes.red {
                 min_game.cubes.red = g.cubes.red
             }
@@ -85,7 +85,6 @@ pub fn day_2_1() {
     let mut min_cube_power_sum: i32 = 0;
 
     for l in input {
-
         let (game_id_str, draws_str) = l.split_once(':').unwrap();
         let game_id = game_id_str.replace("Game ", "").parse::<i32>().unwrap();
 
@@ -111,7 +110,6 @@ pub fn day_2_1() {
             });
 
             game_set.games.push(game);
-
         });
 
         if game_set.is_valid() {
