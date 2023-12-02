@@ -12,12 +12,10 @@ fn calculate_sum(input: &Vec<&str>) -> u32 {
 
         for f_cand in x.chars() {
             let digit = char::to_digit(f_cand, 10);
-            match digit {
-                Some(d) => {
-                    first_digit = Some(d);
-                    break;
-                }
-                _ => {}
+
+            if let Some(d) = digit {
+                first_digit = Some(d);
+                break;
             }
         }
 
@@ -25,12 +23,9 @@ fn calculate_sum(input: &Vec<&str>) -> u32 {
 
         for l_cand in x.chars().rev() {
             let digit = char::to_digit(l_cand, 10);
-            match digit {
-                Some(d) => {
-                    last_digit = Some(d);
-                    break;
-                }
-                _ => {}
+            if let Some(d) = digit {
+                last_digit = Some(d);
+                break;
             }
         }
 
@@ -38,7 +33,7 @@ fn calculate_sum(input: &Vec<&str>) -> u32 {
         digit_sum += last_digit.unwrap();
     }
 
-    return digit_sum;
+    digit_sum
 }
 
 pub fn day_1_1() {
@@ -50,7 +45,7 @@ pub fn day_1_1() {
 }
 
 pub fn day_1_2() {
-    let mut input = include_str!("../input/day_1_1_input.txt")
+    let input = include_str!("../input/day_1_1_input.txt")
         .split('\n')
         .collect::<Vec<_>>();
 
@@ -78,19 +73,16 @@ pub fn day_1_2() {
 
         'outer: for xd in x.chars() {
             for (dd, ds) in digits.iter() {
-                if (first_digit_space.contains(dd)) {
-                    first_digit = Some(ds.clone());
+                if first_digit_space.contains(dd) {
+                    first_digit = Some(*ds);
                     break 'outer;
                 }
             }
 
             let digit = char::to_digit(xd, 10);
-            match digit {
-                Some(found_digit) => {
-                    first_digit = Some(found_digit);
-                    break 'outer;
-                }
-                None => {}
+            if let Some(d) = digit {
+                first_digit = Some(d);
+                break;
             }
 
             first_digit_space.push(xd);
@@ -100,19 +92,16 @@ pub fn day_1_2() {
             for (dd, ds) in digits.iter() {
                 let dd_rev = dd.chars().rev().collect::<String>();
 
-                if (last_digit_space.contains(&dd_rev)) {
-                    last_digit = Some(ds.clone());
+                if last_digit_space.contains(&dd_rev) {
+                    last_digit = Some(*ds);
                     break 'outer;
                 }
             }
 
             let digit = char::to_digit(xd, 10);
-            match digit {
-                Some(found_digit) => {
-                    last_digit = Some(found_digit);
-                    break 'outer;
-                }
-                None => {}
+            if let Some(d) = digit {
+                last_digit = Some(d);
+                break;
             }
 
             last_digit_space.push(xd);
