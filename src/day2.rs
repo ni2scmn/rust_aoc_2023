@@ -19,15 +19,12 @@ impl Game {
     }
 
     pub fn is_valid(&self) -> bool {
-        if self.blue > Game::MAX_BLUE {
-            return false;
-        } else if self.green > Game::MAX_GREEN {
-            return false;
-        }
-        if self.red > Game::MAX_RED {
+        if self.blue > Game::MAX_BLUE ||
+            self.green > Game::MAX_GREEN ||
+            self.red > Game::MAX_RED {
             return false;
         }
-        return true;
+        true
     }
 }
 
@@ -39,14 +36,14 @@ pub fn day_2_1() {
     let mut valid_id_sum: i32 = 0;
 
     for l in input {
-        let (game_id_str, draws_str) = l.split_once(":").unwrap();
+        let (game_id_str, draws_str) = l.split_once(':').unwrap();
         let game_id = game_id_str.replace("Game ", "").parse::<i32>().unwrap();
         let mut game_is_valid = true;
 
-        draws_str.split(";").for_each(|d_str| {
+        draws_str.split(';').for_each(|d_str| {
             let mut game = Game::new();
 
-            d_str.split(",").for_each(|c_str| {
+            d_str.split(',').for_each(|c_str| {
                 let (_, c_str) = c_str.split_once(' ').unwrap();
                 let (q_str, c) = c_str.split_once(' ').unwrap();
 
