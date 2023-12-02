@@ -48,8 +48,6 @@ pub fn day_1_1() {
         .split('\n')
         .collect::<Vec<_>>();
 
-
-
     println!("Day 1 Part 1 answer: {}", calculate_sum(&input));
 }
 
@@ -128,6 +126,6 @@ pub fn day_1_2() {
         digit_sum +=  first_digit.unwrap() * 10;
         digit_sum +=  last_digit.unwrap();
     }
-    println!("Day 1 Part 1 answer: {}", digit_sum);
+    println!("Day 1 Part 2 answer: {}", digit_sum);
 
 }
