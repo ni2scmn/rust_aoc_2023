@@ -7,13 +7,6 @@ struct Number {
     is_valid: bool,
 }
 
-// #[derive(Debug, Default, Copy, Clone)]
-// struct Gear {
-//     ridx: usize,
-//     cidx: usize,
-//     connected_numbers: Vec<String>
-// }
-
 #[derive(Debug, Default)]
 struct Map {
     nrow: usize,
@@ -23,7 +16,7 @@ struct Map {
     gears: Vec<(usize, usize)>,
 }
 
-fn check_surround(map: &Map, ridx: usize, cidx: usize) -> bool {
+fn check_for_surrounding_symbols(map: &Map, ridx: usize, cidx: usize) -> bool {
     for r in [ridx.checked_sub(1), Some(ridx), ridx.checked_add(1)] {
         if r.is_none() {
             continue;
@@ -59,7 +52,6 @@ pub fn day_3_1() {
     // build map
     input.iter().for_each(|l| {
         let mut colvec = Vec::new();
-
         l.chars().for_each(|c| {
             colvec.push(c);
         });
@@ -78,7 +70,6 @@ pub fn day_3_1() {
         .for_each(|(ridx, row)| {
             row.iter().enumerate().for_each(|(cidx, c)| {
                 if *c == '*' {
-                    println!("Gear at: {} {}", ridx, cidx);
                     map.gears.push((ridx, cidx));
                 }
 
@@ -87,7 +78,7 @@ pub fn day_3_1() {
                         n.value = n.value * 10 + cd;
 
                         if !n.is_valid {
-                            n.is_valid = check_surround(&map, ridx, cidx)
+                            n.is_valid = check_for_surrounding_symbols(&map, ridx, cidx)
                         }
                     }
 
@@ -97,7 +88,7 @@ pub fn day_3_1() {
                             row: ridx,
                             col_start: cidx,
                             col_end: 0,
-                            is_valid: check_surround(&map, ridx, cidx),
+                            is_valid: check_for_surrounding_symbols(&map, ridx, cidx),
                         });
                     }
 
@@ -119,33 +110,26 @@ pub fn day_3_1() {
     let mut number_product_sum = 0;
 
     map.gears.iter().for_each(|(gr, gc)| {
-        println!("gear at: {} {}", gr, gc);
 
         let mut matching_numbers = 0;
         let mut matching_number_product = 1;
 
         map.number.iter().for_each(|n| {
-            println!("{:?}", n);
             if n.row as i32 - 1 == *gr as i32 || n.row == *gr || n.row + 1 == *gr {
                 if n.col_start as i32 - 1 == *gc as i32
                     || n.col_start == *gc
                     || n.col_start + 1 == *gc
                 {
-                    println!("Colstart matches");
                     matching_numbers += 1;
                     matching_number_product *= n.value;
                     return;
                 }
                 if n.col_end as i32 - 1 == *gc as i32 || n.col_end == *gc || n.col_end + 1 == *gc {
-                    println!("colend matches");
                     matching_numbers += 1;
                     matching_number_product *= n.value;
                 }
             }
         });
-
-        println!("nn: {}", matching_numbers);
-        println!("nn: {}", matching_number_product);
 
         if matching_numbers == 2 {
             number_product_sum += matching_number_product;
@@ -158,5 +142,12 @@ pub fn day_3_1() {
         .fold(0, |acc, x| if x.is_valid { acc + x.value } else { acc });
 
     println!("Day 3 Part 1 answer: {}", sum);
+
+    if sum != 540212 {
+        panic!("SUM")
+    }
+    if number_product_sum != 87605697 {
+        panic!("number_product_sum")
+    }
     println!("Day 3 Part 2 answer: {}", number_product_sum);
 }
