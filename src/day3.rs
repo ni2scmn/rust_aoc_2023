@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 #[derive(Debug, Default, Copy, Clone)]
 struct Number {
     row: usize,
@@ -22,7 +20,7 @@ struct Map {
     ncol: usize,
     values: Vec<Vec<char>>,
     number: Vec<Number>,
-    gears: Vec<(usize, usize)>
+    gears: Vec<(usize, usize)>,
 }
 
 fn check_surround(map: &Map, ridx: usize, cidx: usize) -> bool {
@@ -78,16 +76,13 @@ pub fn day_3_1() {
         .iter()
         .enumerate()
         .for_each(|(ridx, row)| {
-            row.iter()
-                .enumerate()
-                .for_each(|(cidx, c)| {
+            row.iter().enumerate().for_each(|(cidx, c)| {
+                if *c == '*' {
+                    println!("Gear at: {} {}", ridx, cidx);
+                    map.gears.push((ridx, cidx));
+                }
 
-                    if *c == '*' {
-                        println!("Gear at: {} {}", ridx, cidx);
-                        map.gears.push((ridx, cidx));
-                    }
-
-                    match (c.to_digit(10), &mut curr_number) {
+                match (c.to_digit(10), &mut curr_number) {
                     (Some(cd), Some(n)) => {
                         n.value = n.value * 10 + cd;
 
@@ -117,13 +112,13 @@ pub fn day_3_1() {
                     }
 
                     (None, None) => {}
-                }})
+                }
+            })
         });
 
     let mut number_product_sum = 0;
 
     map.gears.iter().for_each(|(gr, gc)| {
-
         println!("gear at: {} {}", gr, gc);
 
         let mut matching_numbers = 0;
@@ -132,7 +127,10 @@ pub fn day_3_1() {
         map.number.iter().for_each(|n| {
             println!("{:?}", n);
             if n.row as i32 - 1 == *gr as i32 || n.row == *gr || n.row + 1 == *gr {
-                if n.col_start as i32 - 1 == *gc as i32 || n.col_start == *gc || n.col_start + 1 == *gc {
+                if n.col_start as i32 - 1 == *gc as i32
+                    || n.col_start == *gc
+                    || n.col_start + 1 == *gc
+                {
                     println!("Colstart matches");
                     matching_numbers += 1;
                     matching_number_product *= n.value;
@@ -152,16 +150,12 @@ pub fn day_3_1() {
         if matching_numbers == 2 {
             number_product_sum += matching_number_product;
         }
-
     });
 
-    let sum = map.number.iter().fold(0, |acc, x| {
-        if x.is_valid {
-            acc + x.value
-        } else {
-            acc
-        }
-    });
+    let sum = map
+        .number
+        .iter()
+        .fold(0, |acc, x| if x.is_valid { acc + x.value } else { acc });
 
     println!("Day 3 Part 1 answer: {}", sum);
     println!("Day 3 Part 2 answer: {}", number_product_sum);
