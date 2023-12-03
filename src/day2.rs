@@ -52,9 +52,7 @@ impl GameSet {
     }
 
     pub fn is_valid(&self) -> bool {
-        self.games
-            .iter()
-            .all(|x| x.cubes.is_valid())
+        self.games.iter().all(|x| x.cubes.is_valid())
     }
 
     pub fn minimal_game(&self) -> Game {
