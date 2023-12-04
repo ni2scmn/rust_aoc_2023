@@ -110,7 +110,6 @@ pub fn day_3_1() {
     let mut number_product_sum = 0;
 
     map.gears.iter().for_each(|(gr, gc)| {
-
         let mut matching_numbers = 0;
         let mut matching_number_product = 1;
 
