@@ -104,5 +104,4 @@ pub fn day4_2() {
     let n_cards: i32 = cards.iter().map(|x| x.0).sum();
 
     println!("Day 4 Part 2 answer: {}", n_cards);
-
 }
