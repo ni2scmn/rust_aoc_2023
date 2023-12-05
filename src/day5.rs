@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 fn parse_seed(l: &str) -> Vec<i64> {
     l.replace("seeds: ", "")
         .split(' ')
@@ -12,7 +10,7 @@ pub fn day5_1() {
         .split('\n')
         .collect::<Vec<_>>();
 
-    let mut maps: Vec<Vec<(i64, i64, i64)>> = Vec::new(); 
+    let mut maps: Vec<Vec<(i64, i64, i64)>> = Vec::new();
 
     let mut cur_map: Option<Vec<(i64, i64, i64)>> = None;
 
@@ -35,7 +33,7 @@ pub fn day5_1() {
                 .map(|x| x.parse::<i64>().unwrap())
                 .collect::<Vec<_>>();
 
-            let destination_start = map_rule.get(0).unwrap();
+            let destination_start = map_rule.first().unwrap();
             let source_start = map_rule.get(1).unwrap();
             let range_length = map_rule.get(2).unwrap();
 
@@ -46,8 +44,10 @@ pub fn day5_1() {
             let shift = destination_start - source_start;
             let source_end = source_start + range_length;
 
-
-            cur_map.as_mut().unwrap().push((*source_start, source_end, shift));
+            cur_map
+                .as_mut()
+                .unwrap()
+                .push((*source_start, source_end, shift));
 
             // println!("maprule: {:?}", map_rule);
             // println!("current map rules{:?}", cur_map.as_ref().unwrap());
@@ -59,10 +59,9 @@ pub fn day5_1() {
 
     println!("seeds {:?}", seeds.as_ref().unwrap());
 
-    let mut minimum = i64::MAX; 
+    let mut minimum = i64::MAX;
 
     for s in seeds.as_ref().unwrap() {
-
         let mut seed = *s;
 
         for (idx, m) in maps.iter().enumerate() {
