@@ -16,7 +16,7 @@ pub fn day5_1() {
 
     let mut seeds: Option<Vec<i64>> = None;
     for l in input {
-        println!("inputline: {}", l);
+        // println!("inputline: {}", l);
 
         if l.contains("seeds") {
             seeds = Some(parse_seed(l));
@@ -57,7 +57,7 @@ pub fn day5_1() {
         maps.push(cm);
     }
 
-    println!("seeds {:?}", seeds.as_ref().unwrap());
+    // println!("seeds {:?}", seeds.as_ref().unwrap());
 
     let mut minimum = i64::MAX;
 
@@ -65,9 +65,9 @@ pub fn day5_1() {
         let mut seed = *s;
 
         for (idx, m) in maps.iter().enumerate() {
-            println!("map: {:?}", m);
+            // println!("map: {:?}", m);
 
-            println!("pre_map {}: {}", idx, seed);
+            // println!("pre_map {}: {}", idx, seed);
 
             for mr in m {
                 if seed >= mr.0 && seed < mr.1 {
@@ -76,7 +76,7 @@ pub fn day5_1() {
                 }
             }
 
-            println!("post_map {}: {}", idx, seed);
+            // println!("post_map {}: {}", idx, seed);
         }
 
         if seed < minimum {
