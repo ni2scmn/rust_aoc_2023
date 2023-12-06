@@ -1,7 +1,5 @@
 fn day_6_calc(ip: &str) -> i64 {
-    let input: Vec<&str> = ip
-        .split('\n')
-        .collect::<Vec<_>>();
+    let input: Vec<&str> = ip.split('\n').collect::<Vec<_>>();
 
     let times_str = input.first().unwrap().replace("Time: ", "");
     let times: Vec<i64> = times_str
