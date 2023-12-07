@@ -153,12 +153,11 @@ pub fn day_7_1() {
 
     games.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
-    let x = games
+    let total_winnings = games
         .iter()
         .enumerate()
         .fold(0, |acc, (idx, g)| acc + (idx + 1) * (g.bid as usize));
 
-    println!("{}", x);
-
+    println!("Day 7 Part 1 answer: {}", total_winnings);
     // 248569531
 }
