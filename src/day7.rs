@@ -1,5 +1,4 @@
 use std::{cmp::Ordering, collections::HashMap};
-use std::cmp::{max, min};
 
 #[derive(Debug)]
 struct Game {
@@ -33,7 +32,7 @@ impl Game {
     pub fn add_card(&mut self, c: char) {
         self.cards.push(c);
         self.value_part1 = None;
-        self.value_part2  = None;
+        self.value_part2 = None;
     }
 
     pub fn get_value_1(&self) -> GameValue {
@@ -77,8 +76,12 @@ impl Game {
         }
     }
     pub fn calculate_value_2(&self) -> GameValue {
-
-        let cards: Vec<_> = self.cards.iter().filter(|x| **x != 'J').map(|x| *x).collect();
+        let cards: Vec<_> = self
+            .cards
+            .iter()
+            .filter(|x| **x != 'J')
+            .copied()
+            .collect();
         let n_jokers = self.cards.iter().filter(|x| **x == 'J').count();
 
         let mut card_counts: HashMap<char, u32> = HashMap::new();
@@ -97,8 +100,8 @@ impl Game {
         count_value.reverse();
 
         let max_count = match count_value.first() {
-            Some(t) => **t +  TryInto::<u32>::try_into(n_jokers).unwrap(),
-            None =>  TryInto::<u32>::try_into(n_jokers).unwrap(),
+            Some(t) => **t + TryInto::<u32>::try_into(n_jokers).unwrap(),
+            None => TryInto::<u32>::try_into(n_jokers).unwrap(),
         };
 
         let second_max_count = match count_value.get(1) {
@@ -114,8 +117,10 @@ impl Game {
             2 if second_max_count >= 2 => GameValue::TwoPair,
             2 => GameValue::OnePair,
             1 => GameValue::HighCard,
-            _ => {panic!("Error!")}
+            _ => {
+                panic!("Error!")
             }
+        }
     }
 
     fn order_1(&self, other: &Self) -> Option<std::cmp::Ordering> {
