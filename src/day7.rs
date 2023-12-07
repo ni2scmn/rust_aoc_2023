@@ -65,12 +65,9 @@ impl Game {
         let max_count = **count_value.first().unwrap();
         // let second_max_count = **count_value.get(1).unwrap();
 
-        let second_max_count = match (count_value.get(1)) {
+        let second_max_count = match count_value.get(1) {
             Some(t) => **t,
-            None => {
-                println!("!!!!! {:?}", count_value);
-                100
-            }
+            None => 0
         };
 
         let game_value = match max_count {
@@ -82,10 +79,6 @@ impl Game {
             2 => GameValue::OnePair,
             _ => GameValue::HighCard,
         };
-
-        // println!("{:?}", card_counts);
-        // println!("{:?}", game_value);
-
         game_value
     }
 }
@@ -157,36 +150,14 @@ pub fn day_7_1() {
         x.get_value();
     });
 
-    // println!("{:?}", games);
 
-    games.sort_by(|a, b| {
-        let cmp_res = a.partial_cmp(b).unwrap();
-        // println!("{:?}", cmp_res);
-        cmp_res
-    });
-    // games.reverse();
-
-    for g in &games {
-        // println!("{:?}", g);
-    }
-
-    println!("");
-    println!("{:?}", games.get(1).unwrap());
-    println!("{:?}", games.get(2).unwrap());
-
-
-    println!("{:?}", games.get(1).unwrap().partial_cmp(games.get(2).unwrap()));
-
-    println!("{} {}", card_value(&'Q'), card_value(&'T'));
-
-    let cxa = GameValue::FiveOfAKind;
-    let cxb = GameValue::HighCard;
-
-    println!("{:?}", cxa.partial_cmp(&cxb));
+    games.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
     let x = games.iter().enumerate().fold(0, |acc, (idx, g) | {
         acc + (idx + 1) * (g.bid as usize)
     });
 
     println!("{}", x);
+
+    // 248569531
 }
