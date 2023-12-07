@@ -64,7 +64,7 @@ pub fn day5_1() {
     for s in seeds.as_ref().unwrap() {
         let mut seed = *s;
 
-        for (idx, m) in maps.iter().enumerate() {
+        for (_idx, m) in maps.iter().enumerate() {
             // println!("map: {:?}", m);
 
             // println!("pre_map {}: {}", idx, seed);

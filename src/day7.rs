@@ -15,7 +15,7 @@ enum GameValue {
     ThreeOfAKind,
     FullHouse,
     FourOfAKind,
-    FiveOfAKind
+    FiveOfAKind,
 }
 
 impl Game {
@@ -23,7 +23,7 @@ impl Game {
         Game {
             cards: Vec::new(),
             value: None,
-            bid: bid,
+            bid,
         }
     }
 
@@ -36,14 +36,14 @@ impl Game {
         if self.value.is_none() {
             self.value = Some(self.calculate_value());
         }
-        return self.value.unwrap();
+        self.value.unwrap()
     }
 
     pub fn get_value_(&self) -> GameValue {
         if self.value.is_none() {
             return self.calculate_value();
         }
-        return self.value.unwrap();
+        self.value.unwrap()
     }
 
     pub fn calculate_value(&self) -> GameValue {
@@ -63,14 +63,12 @@ impl Game {
         count_value.reverse();
 
         let max_count = **count_value.first().unwrap();
-        // let second_max_count = **count_value.get(1).unwrap();
-
         let second_max_count = match count_value.get(1) {
             Some(t) => **t,
-            None => 0
+            None => 0,
         };
 
-        let game_value = match max_count {
+        match max_count {
             5 => GameValue::FiveOfAKind,
             4 => GameValue::FourOfAKind,
             3 if second_max_count == 2 => GameValue::FullHouse,
@@ -78,8 +76,7 @@ impl Game {
             2 if second_max_count == 2 => GameValue::TwoPair,
             2 => GameValue::OnePair,
             _ => GameValue::HighCard,
-        };
-        game_value
+        }
     }
 }
 
@@ -103,12 +100,16 @@ impl PartialOrd for Game {
                     let csv = card_value(cs);
                     let cov = card_value(co);
 
-                    if csv == cov {
-                        continue;
-                    } else if csv > cov {
-                        return Some(Ordering::Greater);
-                    } else {
-                        return Some(Ordering::Less);
+                    match csv.cmp(&cov) {
+                        Ordering::Equal => {
+                            continue;
+                        }
+                        Ordering::Greater => {
+                            return Some(Ordering::Greater);
+                        }
+                        Ordering::Less => {
+                            return Some(Ordering::Less);
+                        }
                     }
                 }
             }
@@ -150,12 +151,12 @@ pub fn day_7_1() {
         x.get_value();
     });
 
-
     games.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
-    let x = games.iter().enumerate().fold(0, |acc, (idx, g) | {
-        acc + (idx + 1) * (g.bid as usize)
-    });
+    let x = games
+        .iter()
+        .enumerate()
+        .fold(0, |acc, (idx, g)| acc + (idx + 1) * (g.bid as usize));
 
     println!("{}", x);
 
