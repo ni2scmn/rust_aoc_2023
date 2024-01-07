@@ -4,8 +4,13 @@ use std::cmp;
 struct GalaxyPos(usize, usize);
 
 impl GalaxyPos {
-    pub fn distance_to(&self, other: &GalaxyPos, empty_rows: &Vec<usize>, empty_cols: &Vec<usize>, expansion_factor: isize) -> isize {
-
+    pub fn distance_to(
+        &self,
+        other: &GalaxyPos,
+        empty_rows: &Vec<usize>,
+        empty_cols: &Vec<usize>,
+        expansion_factor: isize,
+    ) -> isize {
         let rmin = cmp::min(self.0 as isize, other.0 as isize);
         let rmax = cmp::max(self.0 as isize, other.0 as isize);
         let cmin = cmp::min(self.1 as isize, other.1 as isize);
@@ -27,13 +32,12 @@ impl GalaxyPos {
         }
 
         rdist + cdist
-    } 
+    }
 }
-
 
 pub fn day_11_1() {
     let input: Vec<&str> = include_str!("../input/day_11_1_example.txt")
-       .split('\n')
+        .split('\n')
         .collect::<Vec<_>>();
 
     let mut map: Vec<Vec<char>> = Vec::new();
@@ -50,15 +54,14 @@ pub fn day_11_1() {
     let mut empty_rows: Vec<usize> = Vec::new();
     let mut empty_cols: Vec<usize> = Vec::new();
 
-
     // find empty rows
     for (r_idx, l) in map.iter().enumerate() {
         let mut empty = true;
-        
+
         for f in l {
-            if *f == '#'{
+            if *f == '#' {
                 empty = false;
-            } 
+            }
         }
         if empty {
             empty_rows.push(r_idx);
@@ -96,14 +99,21 @@ pub fn day_11_1() {
             if g1_idx == g2_idx {
                 continue;
             }
-            part1_total_distance += galaxies.get(g1_idx).unwrap().distance_to(galaxies.get(g2_idx).unwrap(), &empty_rows, &empty_cols, 1);
-            part2_total_distance += galaxies.get(g1_idx).unwrap().distance_to(galaxies.get(g2_idx).unwrap(), &empty_rows, &empty_cols, 1000000 - 1);
-
-            
+            part1_total_distance += galaxies.get(g1_idx).unwrap().distance_to(
+                galaxies.get(g2_idx).unwrap(),
+                &empty_rows,
+                &empty_cols,
+                1,
+            );
+            part2_total_distance += galaxies.get(g1_idx).unwrap().distance_to(
+                galaxies.get(g2_idx).unwrap(),
+                &empty_rows,
+                &empty_cols,
+                1000000 - 1,
+            );
         }
     }
 
     println!("Day 11 Part 1 answer: {}", part1_total_distance);
     println!("Day 11 Part 2 answer: {}", part2_total_distance);
 }
-   
