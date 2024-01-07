@@ -1,17 +1,38 @@
+use std::cmp;
+
 #[derive(Debug)]
 struct GalaxyPos(usize, usize);
 
 impl GalaxyPos {
-    pub fn distance_to(&self, other: &GalaxyPos) -> isize {
-        let rdist = (self.0 as isize - other.0 as isize).abs();
-        let cdist = (self.1 as isize - other.1 as isize).abs();
+    pub fn distance_to(&self, other: &GalaxyPos, empty_rows: &Vec<usize>, empty_cols: &Vec<usize>, expansion_factor: isize) -> isize {
+
+        let rmin = cmp::min(self.0 as isize, other.0 as isize);
+        let rmax = cmp::max(self.0 as isize, other.0 as isize);
+        let cmin = cmp::min(self.1 as isize, other.1 as isize);
+        let cmax = cmp::max(self.1 as isize, other.1 as isize);
+
+        let mut rdist = rmax - rmin;
+        let mut cdist = cmax - cmin;
+
+        for er in empty_rows.iter() {
+            if *er > rmin as usize && *er < rmax as usize {
+                rdist += expansion_factor;
+            }
+        }
+
+        for ec in empty_cols.iter() {
+            if *ec > cmin as usize && *ec < cmax as usize {
+                cdist += expansion_factor;
+            }
+        }
+
         rdist + cdist
     } 
 }
 
 
 pub fn day_11_1() {
-    let input: Vec<&str> = include_str!("../input/day_11_1_input.txt")
+    let input: Vec<&str> = include_str!("../input/day_11_1_example.txt")
        .split('\n')
         .collect::<Vec<_>>();
 
@@ -26,8 +47,8 @@ pub fn day_11_1() {
     let n_rows = input.len();
     let n_cols = input.first().unwrap().len();
 
-    let mut row_dupl: Vec<usize> = Vec::new();
-    let mut col_dupl: Vec<usize> = Vec::new();
+    let mut empty_rows: Vec<usize> = Vec::new();
+    let mut empty_cols: Vec<usize> = Vec::new();
 
 
     // find empty rows
@@ -40,8 +61,7 @@ pub fn day_11_1() {
             } 
         }
         if empty {
-            // println!("row: {} is empty", r_idx);
-            row_dupl.push(r_idx);
+            empty_rows.push(r_idx);
         }
     }
 
@@ -55,29 +75,7 @@ pub fn day_11_1() {
             }
         }
         if empty {
-            // println!("column: {} is empty", c_idx);
-            col_dupl.push(c_idx);
-        }
-    }
-
-
-    // duplicate empty rows
-    while !row_dupl.is_empty() {
-        let row_to_dupl = row_dupl.pop().unwrap();
-        let dupl = vec!['.'; n_cols];
-        map.insert(row_to_dupl, dupl);
-
-        for r in row_dupl.iter_mut() {
-            *r += 1;
-        }
-    }
-
-    // duplicate empty cols
-    while !col_dupl.is_empty() {
-        let col_to_dupl = col_dupl.pop().unwrap();
-
-        for r in map.iter_mut() {
-            r.insert(col_to_dupl, '.');
+            empty_cols.push(c_idx);
         }
     }
 
@@ -90,31 +88,22 @@ pub fn day_11_1() {
         }
     }
 
-
-    // print map
-    // for r in map.iter() {
-    //     for f in r.iter() {
-    //         print!("{}", f);
-    //     }
-    //     println!("");
-    // }
-
-    // print galaxies
-    // for g in galaxies.iter() {
-    //     println!("{:?}", g);
-    // }
-
-    let mut total_distance: isize = 0;
+    let mut part1_total_distance: isize = 0;
+    let mut part2_total_distance: isize = 0;
 
     for g1_idx in 0..galaxies.len() {
         for g2_idx in g1_idx..galaxies.len() {
             if g1_idx == g2_idx {
                 continue;
             }
-            total_distance += galaxies.get(g1_idx).unwrap().distance_to(galaxies.get(g2_idx).unwrap());
+            part1_total_distance += galaxies.get(g1_idx).unwrap().distance_to(galaxies.get(g2_idx).unwrap(), &empty_rows, &empty_cols, 1);
+            part2_total_distance += galaxies.get(g1_idx).unwrap().distance_to(galaxies.get(g2_idx).unwrap(), &empty_rows, &empty_cols, 1000000 - 1);
+
+            
         }
     }
 
-    println!("Day 11 Part 1 answer: {}", total_distance);
+    println!("Day 11 Part 1 answer: {}", part1_total_distance);
+    println!("Day 11 Part 2 answer: {}", part2_total_distance);
 }
    
