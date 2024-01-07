@@ -1,4 +1,6 @@
 use rust_2023::day1::{day_1_1, day_1_2};
+use rust_2023::day11::day_11_1;
+use rust_2023::day19::day_19_1;
 use rust_2023::day2::day_2_1;
 use rust_2023::day3::day_3_1;
 use rust_2023::day4::{day4_1, day4_2};
@@ -18,6 +20,8 @@ fn main_run() {
     day_6_1();
     day_7_1();
     day_8_1();
+    day_11_1();
+    // day_19_1();
 }
 
 fn main() {
